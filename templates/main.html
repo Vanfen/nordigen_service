@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Main website page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ url_for('package', path='/src/selector.css') }}" rel="stylesheet" />
+    </head>
+    <body style="text-align:center;">
+        <div style="margin: 10% 0 0 0;">
+            <h1>MAIN PAGE</h1>
+            <button onclick="window.location.href='/?country=LV'" style="cursor: pointer;"><p>Show institutions - Latvia</p></button>
+            <button onclick="window.location.href='/?country=DE'" style="cursor: pointer;"><p>Show institutions - Germany</p></button>
+            <button onclick="window.location.href='/?country=EE'" style="cursor: pointer;"><p>Show institutions - Estonia</p></button>
+            <button onclick="window.location.href='/'" style="cursor: pointer;"><p>Show all available countries</p></button>
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Nordigen Bank Selector UI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <link href="./node_modules/nordigen-bank-ui/package/src/selector.min.css" rel="stylesheet" /> -->
+        <!--Local-->
+        <link href="{{ url_for('package', path='/src/selector.css') }}" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="institution-content-wrapper"></div>
+    </body>
+
+    <!-- <script src="./node_modules/nordigen-bank-ui/package/src/selector.min.js"></script> -->
+
+    <!--Local-->
+    <script src="{{ url_for('package', path='/src/selector.min.js') }}"></script>
+    <script>
+        // Alert for user that there was an error
+        {% if error_notification is not none %}
+            alert("{{ error_notification }}");
+        {% endif %}
+        // Get institutions list from ob.nordigen.com/api/v2/institutions/?country=GB
+        const institutionList = {{ institutions | tojson}};
+
+        const config = {
+            redirectUrl: 'http://127.0.0.1:8000/main',
+            logoUrl: 'https://cdn.nordigen.com/ais/Nordigen_Logo_Black.svg',
+            text: 'Please choose the country and then the institution needed to proceed.',
+            countryFilter: {% if country is not none %} false {% else %} true {% endif %},
+            styles: {
+                // Primary
+                fontFamily: 'https://fonts.googleapis.com/css2?family=Roboto&display=swap',
+                fontSize: '16',
+                backgroundColor: '#F2F2F2',
+                textColor: '#1B2021',
+                headingColor: '#222',
+                linkColor: '#3F52E5',
+                // Modal
+                modalTextColor: '#1B2021',
+                modalBackgroundColor: '#fff',
+            }
+        };
+
+        institutionSelector(institutionList, 'institution-modal-content', config);
+        
+        // Change the institutions href's to use agreement endpoint
+        const institutionObjs = document.querySelectorAll("*[class*=list-institution] a");
+        if (institutionObjs.length > 0){
+            institutionObjs.forEach(institution => {
+                const id = institution.getAttribute('data-institution');
+                institution.href="/agreements/"+id;
+            });
+        }
+        
+        // Change the institutions href's to use agreement endpoint
+        // in case if we firstly render countries
+        // on 'DOMSubtreeModified' will trigger after element content will change
+        $(".institution-container").on('DOMSubtreeModified', function() {
+            const institutionObjs = document.querySelectorAll("*[class*=list-institution] a");
+            institutionObjs.forEach(institution => {
+                const id = institution.getAttribute('data-institution');
+                institution.href="/agreements/"+id;
+            });
+        });
+        
+
+    </script>
+</html>
